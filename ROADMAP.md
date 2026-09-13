@@ -23,16 +23,16 @@ The loop protocol lives in `CLAUDE.md`. Work the first unchecked milestone top t
 - [x] **M4 — Capture UI** *(done 2026-09-06, commit e14f452)*: phone PWA capture, multi-shot, non-blocking submit, live queue cards + retry. (`photo_feedback` photo-reject still deferred until tuning frozen — in the scanning-improvements ticket.)
 - [x] **M5 — Review UI** *(done 2026-09-06, commit caa09c5)*: accept/edit/delete, can't-determine, add-another-angle re-scan, dupe warning, spec_url + datasheet search.
 - [x] **M6 — Browse UI** *(done 2026-09-06, commit 3143deb)*: search-first with quantities, category/interface filters, optional location grouping, key-image thumbs, unverified badges, CSV export.
-- [ ] **M7 — Open-source prep** *(publication blocked on the fixtures split, M8 phase 3)*
+- [x] **M7 — Open-source prep** *(done 2026-09-12: repo public at github.com/protocake/partspile)*
   - [x] LICENSE — MIT, Ben's Asana ruling 2026-09-09.
   - [x] README: install story, vision backends, project background, license.
   - [x] `.env.example` complete; local-model benchmarks logged (iters 8–13 in `evals/log.md`).
   - [x] Repo scrub at HEAD: history secret-grep clean; design-canvas tracking bug fixed.
-  - [ ] Fixtures + eval log to private `partspile-fixtures` repo via fresh-copy split (DECISIONS #43); this dir stays as private archive.
+  - [x] Fixtures + eval log to private `partspile-fixtures` repo via fresh-copy split (DECISIONS #43); ElectronicsIdentifier kept as private archive.
 - [ ] **M8 — Productization** *(Approach A approved by Ben 2026-09-11: minimal-diff, cloud-first onboarding)*
   - [x] Phase 0 — `~/.partspile` data dir (`paths.py`); config/db/photos/cutouts off repo-relative paths; legacy `./data` shim.
   - [x] Phase 1 — PyPI packaging: `pyproject` deps fixed (+`python-multipart`), `[project.scripts]`, prompts+swift as package data, wheel verified.
   - [x] Phase 2 — CLI (`partspile serve`, browser auto-open, cloud-first nudge) + `/setup` onboarding page (key → `~/.partspile/config` 0600); 100 tests green; live smoke passed.
-  - [ ] Phase 3 — fixtures split: `eval.py` fixtures_dir() resolution [x]; fresh-copy split into `partspile` (public) + `partspile-fixtures` (private) per DECISIONS #43.
+  - [x] Phase 3 — fixtures split done 2026-09-12: `partspile` (public, single fresh commit) + `partspile-fixtures` (private) live on GitHub; eval sibling auto-detection verified.
   - [ ] Phase 4 — Homebrew tap (`homebrew-partspile`, formula w/ precompiled `partspile-cutout`) — after first PyPI publish.
 - [ ] **Holdout check (Ben, manual)** — Ben runs against `fixtures/holdout/` himself. Never automated.
