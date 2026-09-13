@@ -7,10 +7,15 @@ parts you already own.
 ## Install
 
 ```bash
-uvx partspile            # zero-install run (uv)
-# or
-pipx install partspile && partspile
-# (Homebrew tap coming: brew install <tap>/partspile)
+# Homebrew (macOS)
+brew tap protocake/partspile
+brew trust protocake/partspile   # one-time, required for third-party taps
+brew install partspile
+partspile
+
+# or grab the wheel from the latest GitHub release:
+pipx install https://github.com/protocake/partspile/releases/download/v0.2.0/partspile-0.2.0-py3-none-any.whl
+# (PyPI publish pending — `uvx partspile` / `pipx install partspile` land then)
 ```
 
 `partspile` starts the server, opens your browser, and walks you through setup on
