@@ -1,0 +1,19 @@
+{
+  "meta": {"prompt_version": "demo", "provider": "demo", "model": "none"},
+  "bins": {
+    "bin01": {
+      "parts": [
+        {"canonical": "KY-015", "qty": 2, "confidence": "high", "needs_reshoot": false},
+        {"canonical": "GY-521", "qty": 1, "confidence": "high", "needs_reshoot": false},
+        {"canonical": "EC11 Rotary Encoder", "qty": 1, "confidence": "medium", "needs_reshoot": true,
+         "reshoot_reason": "shaft-down; need bottom view to count pins"}
+      ]
+    },
+    "bin02": {
+      "parts": [
+        {"canonical": "srd-05vdc-sl-c", "qty": 1, "confidence": "high", "needs_reshoot": false},
+        {"canonical": "ESP32-WROOM-32 devkit", "qty": 1, "confidence": "high", "needs_reshoot": false}
+      ]
+    }
+  }
+}

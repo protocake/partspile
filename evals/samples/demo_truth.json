@@ -1,0 +1,16 @@
+{
+  "bin01": {
+    "parts": [
+      {"canonical": "KY-015", "category": "sensor", "qty": 2},
+      {"canonical": "GY-521", "category": "sensor", "qty": 1},
+      {"canonical": "EC11 rotary encoder", "category": "other", "qty": 1,
+       "hidden_spec": "pin count hidden (photographed shaft-down)"}
+    ]
+  },
+  "bin02": {
+    "parts": [
+      {"canonical": "SRD-05VDC-SL-C", "category": "actuator", "qty": 1},
+      {"canonical": "ESP32-WROOM-32 devkit", "category": "board", "qty": 1}
+    ]
+  }
+}

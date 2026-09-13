@@ -1,0 +1,18 @@
+{
+  "meta": {"prompt_version": "demo", "provider": "demo", "model": "none"},
+  "bins": {
+    "bin01": {
+      "parts": [
+        {"canonical": "KY-015", "qty": 1, "confidence": "high", "needs_reshoot": false},
+        {"canonical": "GY-273", "qty": 1, "confidence": "high", "needs_reshoot": false},
+        {"canonical": "EC11 rotary encoder", "qty": 1, "confidence": "high", "needs_reshoot": false}
+      ]
+    },
+    "bin02": {
+      "parts": [
+        {"canonical": "SRD-05VDC-SL-C", "qty": 1, "confidence": "high", "needs_reshoot": false},
+        {"canonical": "ESP32-WROOM-32 devkit", "qty": 1, "confidence": "low", "needs_reshoot": false}
+      ]
+    }
+  }
+}

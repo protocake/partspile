@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #111418; }
+    a { color: #0a74da; text-decoration: none; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 760px; background: #111418; color: #e8eaed; display: flex; flex-direction: column; padding: 18px; box-sizing: border-box; gap: 14px">
+  <div style="display: flex; align-items: center; gap: 12px">
+    <div style="font-weight: 700; font-size: 16px">Parts Pile</div>
+    <div style="margin-left: auto; color: #9aa0a6; font-size: 12px">2 scans running ↻</div>
+  </div>
+  <div style="flex: 1; border-radius: 16px; background: #12161b url(./bin02_small.jpg) center/cover; position: relative; overflow: hidden">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(17,20,24,0.9))"></div>
+    <div style="position: absolute; left: 14px; bottom: 14px; display: flex; gap: 8px">
+      <div style="width: 52px; height: 52px; border-radius: 8px; background: url(./bin02_small.jpg) 30% 30%/300%; outline: 2px solid #0a74da"></div>
+      <div style="width: 52px; height: 52px; border-radius: 8px; background: url(./bin02_small.jpg) 70% 60%/300%"></div>
+    </div>
+    <div style="position: absolute; right: 14px; bottom: 18px; color: #e8eaed; font-size: 12px; background: rgba(28,33,40,0.85); border-radius: 12px; padding: 4px 10px">2 shots</div>
+  </div>
+  <input style="font-size: 15px; padding: 11px 13px; border-radius: 10px; border: 1px solid #3a4048; background: #1c2128; color: #e8eaed" placeholder="bin label (optional — shoebox is fine)">
+  <div style="display: flex; align-items: center; gap: 14px; justify-content: center; padding: 4px 0">
+    <button style="width: 54px; height: 54px; border-radius: 50%; border: 1px solid #3a4048; background: #1c2128; color: #9aa0a6; font-size: 11px">library</button>
+    <button style="width: 78px; height: 78px; border-radius: 50%; border: 5px solid #3a4048; background: #fff"></button>
+    <button style="width: 54px; height: 54px; border-radius: 50%; border: none; background: #1c5c2e; color: #fff; font-size: 12px; font-weight: 700">Done →</button>
+  </div>
+  <div style="text-align: center; color: #9aa0a6; font-size: 12px">shutter = another angle of the SAME bin · Done submits &amp; clears for the next bin</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

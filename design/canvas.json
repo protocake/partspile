@@ -1,0 +1,15 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1280, "h": 800, "title": "Desktop · Browse landing + QR" },
+    { "file": "Detail.dc.html", "x": 0, "y": 900, "w": 1280, "h": 800, "title": "Desktop · Part detail (modal over browse)" },
+    { "file": "Review.dc.html", "x": 0, "y": 1800, "w": 1280, "h": 800, "title": "Desktop · Review with part circles" },
+    { "file": "Capture.dc.html", "x": 1360, "y": 0, "w": 390, "h": 760, "title": "Phone · Capture" }
+  ],
+  "annotations": [
+    { "id": "idea-qr", "x": 1360, "y": 900, "w": 300, "text": "Desktop-first flow: app opens on Browse. QR panel hands capture to the phone (code is generated from the server's LAN URL). Scans-in-flight live in the sidebar so the desktop is also the mission control." },
+    { "id": "idea-circles", "x": 1360, "y": 1120, "w": 300, "text": "Review (Ben's cut-out idea): every part is auto-CROPPED into its own photo from the model's bounding boxes - zero image processing, the crop is pure CSS on the original. Unclear parts keep the amber dashed treatment. The full shot stays on the left: selecting a row spotlights where its crop sits (crops can be loose when boxes are - context matters). The part crop also becomes the part's default key image in browse." },
+    { "id": "idea-detail", "x": 1360, "y": 1380, "w": 300, "text": "Part detail is a MODAL (Ben's call): click any browse card and it pops over the dimmed results, so search context is never lost - Esc or X drops you right back. Catalog photo from the product page can become the key image; original captures always stay in the strip. 'Look up' web-searches the canonical name. Serial/notes editable inline." },
+    { "id": "idea-capture", "x": 1360, "y": 1620, "w": 300, "text": "Phone capture leans into camera-first: big shutter = another angle of the same bin, Done submits and resets for the next bin. Live scan count up top." }
+  ],
+  "launch": { "view": "canvas" }
+}

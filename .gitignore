@@ -1,0 +1,16 @@
+# raw photo drops (pre-fixture staging; Ben sorts these into fixtures/)
+Photos/
+__pycache__/
+*.pyc
+.venv/
+.env
+data/
+*.sqlite3
+.pytest_cache/
+.DS_Store
+fixtures_staging/photos/
+.venv/
+evals/runs/*.tmp
+build/
+dist/
+*.egg-info/

@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #111418; }
+    a { color: #0a74da; text-decoration: none; } a:hover { color: #3d95e8; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 800px; background: #111418; color: #e8eaed; display: flex; flex-direction: column">
+  <div style="display: flex; align-items: center; gap: 24px; padding: 14px 28px; border-bottom: 1px solid #262c34">
+    <div style="font-weight: 700; font-size: 17px; letter-spacing: 0.2px">Parts Pile</div>
+    <div style="display: flex; gap: 18px; font-size: 14px">
+      <span style="color: #e8eaed; font-weight: 600; border-bottom: 2px solid #0a74da; padding-bottom: 3px">Browse</span>
+      <a href="#">Review <span style="background: #7a1f1f; color: #fff; border-radius: 8px; font-size: 11px; padding: 1px 7px; margin-left: 2px">3</span></a>
+      <a href="#">Scans</a>
+    </div>
+    <div style="margin-left: auto; color: #9aa0a6; font-size: 13px">217 parts · 41 types</div>
+  </div>
+  <div style="display: flex; flex: 1; min-height: 0">
+    <div style="flex: 1; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; min-width: 0">
+      <input style="font-size: 18px; padding: 13px 16px; border-radius: 10px; border: 1px solid #3a4048; background: #1c2128; color: #e8eaed; width: 100%; box-sizing: border-box" value="" placeholder="Do I already have this?  Search parts, notes, serials…">
+      <div style="display: flex; gap: 8px; font-size: 13px; color: #9aa0a6; align-items: center">
+        <span style="background: #1c2128; border: 1px solid #3a4048; border-radius: 16px; padding: 4px 12px">any category ▾</span>
+        <span style="background: #1c2128; border: 1px solid #3a4048; border-radius: 16px; padding: 4px 12px">any interface ▾</span>
+        <span style="background: #1c2128; border: 1px solid #3a4048; border-radius: 16px; padding: 4px 12px">group: none ▾</span>
+        <a href="#" style="margin-left: auto">CSV export</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; overflow: hidden">
+        <div style="background: #1c2128; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 7px">
+          <div style="width: 200px; height: 200px; border-radius: 8px; overflow: hidden; position: relative; align-self: center"><img src="./bin02_small.jpg" style="position: absolute; width: 1053px; left: -695px; top: -693px; max-width: none"></div>
+          <div style="font-weight: 700; font-size: 13px">SRD-05VDC-SL-C</div>
+          <div style="display: flex; align-items: center; font-size: 11px; color: #9aa0a6">
+            <span>shoebox A</span><span style="margin-left: auto; font-size: 15px; font-weight: 700; color: #e8eaed">×2</span>
+          </div>
+        </div>
+        <div style="background: #1c2128; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 7px">
+          <div style="width: 200px; height: 200px; border-radius: 8px; background: #12161b; display: flex; align-items: center; justify-content: center; color: #3a4048; font-size: 12px; align-self: center">no photo</div>
+          <div style="font-weight: 700; font-size: 13px">ESP32 DevKitC <span style="font-size: 10px; font-weight: 400; background: #5f5310; border-radius: 8px; padding: 1px 6px">unverified</span></div>
+          <div style="display: flex; align-items: center; font-size: 11px; color: #9aa0a6">
+            <span>desk drawer</span><span style="margin-left: auto; font-size: 15px; font-weight: 700; color: #e8eaed">×1</span>
+          </div>
+        </div>
+        <div style="background: #1c2128; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 7px">
+          <div style="width: 200px; height: 200px; border-radius: 8px; overflow: hidden; position: relative; align-self: center"><img src="./bin02_small.jpg" style="position: absolute; width: 606px; left: -73px; top: -357px; max-width: none"></div>
+          <div style="font-weight: 700; font-size: 13px">KY-023</div>
+          <div style="display: flex; align-items: center; font-size: 11px; color: #9aa0a6">
+            <span>shoebox A</span><span style="margin-left: auto; font-size: 15px; font-weight: 700; color: #e8eaed">×1</span>
+          </div>
+        </div>
+        <div style="background: #1c2128; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 7px">
+          <div style="width: 200px; height: 200px; border-radius: 8px; overflow: hidden; position: relative; align-self: center"><img src="./bin02_small.jpg" style="position: absolute; width: 909px; left: -382px; top: -264px; max-width: none"></div>
+          <div style="font-weight: 700; font-size: 13px">HX1838 IR receiver</div>
+          <div style="display: flex; align-items: center; font-size: 11px; color: #9aa0a6">
+            <span>shoebox A</span><span style="margin-left: auto; font-size: 15px; font-weight: 700; color: #e8eaed">×3</span>
+          </div>
+        </div>
+      </div>
+      <div style="color: #5b6169; font-size: 12px">…grid continues; square part cut-outs are the default key image</div>
+    </div>
+    <div style="width: 210px; border-left: 1px solid #262c34; padding: 18px 16px; display: flex; flex-direction: column; gap: 14px">
+      <div style="background: #1c2128; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+        <div style="font-weight: 600; font-size: 12px; color: #9aa0a6">SCAN WITH YOUR PHONE</div>
+        <svg width="96" height="96" viewBox="0 0 29 29" style="background: #fff; border-radius: 6px; padding: 7px; box-sizing: content-box">
+          <path fill="#111418" d="M0 0h7v7H0zM11 0h1v2h-1zM14 0h3v1h-2v1h-1zM19 0h1v1h-1zM22 0h7v7h-7zM1 1v5h5V1zM23 1v5h5V1zM2 2h3v3H2zM9 2h1v3h1v1H9zM13 2h1v2h1v1h-2zM18 2h1v2h1v2h-2zM24 2h3v3h-3zM12 5h1v1h-1zM16 5h1v2h-1zM8 7h1v1H8zM10 7h2v1h-2zM14 7h1v1h-1zM20 7h1v1h-1zM0 9h2v1h1v1H0zM4 9h3v1H5v1H4zM9 9h2v2H9zM13 9h2v1h1v1h-2v1h-1zM18 9h1v1h1v1h-2zM22 9h1v2h-1zM25 9h2v1h1v2h-2v-1h-1zM7 11h1v2H7zM11 11h1v1h-1zM16 11h2v1h-2zM20 11h1v1h1v1h-2zM2 12h3v1h1v1H3v-1H2zM12 12h2v2h-2zM24 12h1v1h-1zM0 13h1v1H0zM8 13h2v1h1v1H8zM17 13h2v2h-2zM26 13h3v1h-2v1h-1zM5 14h1v2H5zM15 14h1v2h1v1h-2zM21 14h2v1h1v2h-2v-1h-1zM1 15h3v2H2v-1H1zM11 15h1v2h-1zM19 15h1v1h-1zM25 15h1v1h-1zM27 15h2v2h-1v-1h-1zM7 16h3v1H8v1H7zM13 16h1v1h-1zM18 16h1v2h-1zM0 17h1v2h1v1H0zM4 17h1v1h1v1H4zM20 17h2v1h-2zM24 17h1v2h-1zM26 17h1v1h1v2h-2zM9 18h2v1h1v1h-3zM14 18h2v2h-2zM2 19h2v1H3v1H2zM6 19h2v2H7v1H5v-1h1zM19 19h2v1h1v2h-2v-1h-1zM12 20h1v1h1v2h-2zM17 20h1v1h-1zM23 20h1v1h-1zM28 20h1v3h-1zM0 22h7v7H0zM8 22h2v1h1v2h-2v-1H8zM15 22h2v1h1v2h-2v-1h-1zM25 22h1v1h1v1h-2zM1 23v5h5v-5zM20 23h2v1h1v1h-3zM2 24h3v3H2zM11 24h1v2h-1zM13 24h1v1h-1zM24 25h2v1h1v1h-3zM9 26h1v1H9zM14 26h2v1h1v1h-3v-1zM19 26h2v1h-1v2h-2v-1h1zM12 27h1v2h-1zM22 27h1v2h-1zM27 27h2v2h-2z"></path>
+        </svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <div style="font-weight: 600; font-size: 11px; color: #9aa0a6">SCANS</div>
+        <div style="background: #1c2128; border-radius: 8px; padding: 7px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; gap: 6px">
+          <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">junk drawer 2</span><span style="background: #0a4a8f; border-radius: 10px; font-size: 10px; padding: 2px 7px; flex: none">running</span>
+        </div>
+        <div style="background: #1c2128; border-radius: 8px; padding: 7px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; gap: 6px">
+          <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">resistor bag</span><span style="background: #5f5310; border-radius: 10px; font-size: 10px; padding: 2px 7px; flex: none">queued</span>
+        </div>
+        <div style="background: #1c2128; border-radius: 8px; padding: 7px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; gap: 6px">
+          <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">shoebox A</span><span style="background: #1c5c2e; border-radius: 10px; font-size: 10px; padding: 2px 7px; flex: none">→ review</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

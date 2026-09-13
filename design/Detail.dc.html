@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #111418; }
+    a { color: #0a74da; text-decoration: none; } a:hover { color: #3d95e8; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 800px; background: #111418; color: #e8eaed; position: relative; overflow: hidden">
+  <div style="position: absolute; inset: 0; filter: blur(2px); opacity: 0.5">
+    <div style="display: flex; align-items: center; gap: 24px; padding: 14px 28px; border-bottom: 1px solid #262c34">
+      <div style="font-weight: 700; font-size: 17px">Parts Pile</div>
+      <div style="display: flex; gap: 18px; font-size: 14px">
+        <span style="font-weight: 600; border-bottom: 2px solid #0a74da; padding-bottom: 3px">Browse</span>
+        <span style="color: #9aa0a6">Review</span><span style="color: #9aa0a6">Scans</span>
+      </div>
+    </div>
+    <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 14px">
+      <div style="height: 48px; border-radius: 10px; background: #1c2128"></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+        <div style="height: 190px; border-radius: 10px; background: #1c2128"></div>
+        <div style="height: 190px; border-radius: 10px; background: #1c2128"></div>
+        <div style="height: 190px; border-radius: 10px; background: #1c2128"></div>
+        <div style="height: 190px; border-radius: 10px; background: #1c2128"></div>
+        <div style="height: 190px; border-radius: 10px; background: #1c2128"></div>
+        <div style="height: 190px; border-radius: 10px; background: #1c2128"></div>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; inset: 0; background: rgba(9,11,14,0.55)"></div>
+  <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 980px; background: #1c2128; border: 1px solid #2c333c; border-radius: 16px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); display: flex; overflow: hidden">
+    <div style="width: 380px; background: #171b21; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+      <div style="border-radius: 12px; background: #fff; height: 250px; display: flex; align-items: center; justify-content: center; position: relative">
+        <div style="width: 160px; height: 160px; background: #2b6cb0; border-radius: 10px; box-shadow: 0 14px 32px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px">catalog photo</div>
+        <span style="position: absolute; left: 10px; top: 10px; background: #1c5c2e; color: #fff; font-size: 11px; border-radius: 10px; padding: 2px 9px">from product page</span>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <div style="width: 72px; height: 54px; border-radius: 8px; background: #fff; outline: 2px solid #0a74da; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #555">catalog</div>
+        <div style="width: 72px; height: 54px; border-radius: 8px; background: url(./bin02_small.jpg) center/cover"></div>
+        <div style="width: 72px; height: 54px; border-radius: 8px; background: url(./bin02_small.jpg) 60% 40%/220%"></div>
+      </div>
+      <div style="color: #9aa0a6; font-size: 12px; line-height: 1.4">your original captures stay — click any to make it the key image</div>
+    </div>
+    <div style="flex: 1; padding: 22px 24px; display: flex; flex-direction: column; gap: 13px; min-width: 0">
+      <div style="display: flex; align-items: flex-start; gap: 12px">
+        <div>
+          <div style="font-size: 22px; font-weight: 800">SRD-05VDC-SL-C <span style="font-size: 14px; color: #9aa0a6; font-weight: 400">×2 in inventory</span></div>
+          <div style="color: #9aa0a6; font-size: 13px; margin-top: 2px">Songle 5V power relay · bare_component · 5V coil · shoebox A</div>
+        </div>
+        <button style="margin-left: auto; border: none; background: #262c34; color: #9aa0a6; border-radius: 8px; width: 32px; height: 32px; font-size: 15px">✕</button>
+      </div>
+      <div style="background: #12161b; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 12px">
+        <div style="flex: 1; min-width: 0">
+          <div style="font-size: 11px; color: #9aa0a6; margin-bottom: 3px">PRODUCT PAGE</div>
+          <a href="#" style="font-size: 13px">songlerelay.com/srd-05vdc-sl-c-datasheet</a>
+        </div>
+        <button style="border: none; border-radius: 8px; padding: 8px 13px; background: #0a74da; color: #fff; font-size: 13px; display: flex; align-items: center; gap: 6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><span>look up</span></button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div style="background: #12161b; border-radius: 10px; padding: 11px 13px">
+          <div style="font-size: 11px; color: #9aa0a6; margin-bottom: 3px">SERIAL NUMBER</div>
+          <div style="font-size: 13px; color: #5b6169">tap to add…</div>
+        </div>
+        <div style="background: #12161b; border-radius: 10px; padding: 11px 13px">
+          <div style="font-size: 11px; color: #9aa0a6; margin-bottom: 3px">QUANTITY / LOCATION</div>
+          <div style="font-size: 13px">×2 · shoebox A</div>
+        </div>
+      </div>
+      <div style="background: #12161b; border-radius: 10px; padding: 11px 13px">
+        <div style="font-size: 11px; color: #9aa0a6; margin-bottom: 3px">NOTES</div>
+        <div style="font-size: 13px; line-height: 1.5">One has slightly bent pins from the drone crash — still switches fine.</div>
+        <div style="color: #0a74da; font-size: 12px; margin-top: 6px">+ add a note</div>
+      </div>
+      <div style="display: flex; gap: 10px; color: #9aa0a6; font-size: 12px; align-items: center; margin-top: auto">
+        <span>scanned 2026-09-06 · claude-opus-5 · prompt v3</span>
+        <a href="#" style="margin-left: auto">edit all fields</a>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

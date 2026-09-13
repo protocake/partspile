@@ -1,0 +1,28 @@
+[project]
+name = "partspile"
+version = "0.2.0"
+description = "Parts Pile: photo-based electronics part scanner and inventory"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic",
+    "pydantic>=2",
+    "qrcode",
+    "fastapi",
+    "uvicorn[standard]",
+    "python-multipart",
+]
+
+[project.scripts]
+partspile = "partspile.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["partspile*"]
+
+[tool.setuptools.package-data]
+partspile = ["prompts/*.md", "native/*.swift"]
