@@ -37,6 +37,6 @@ The loop protocol lives in `CLAUDE.md`. Work the first unchecked milestone top t
   - [ ] Phase 4 — distribution:
     - [x] v0.2.0 tagged + GitHub release with wheel/sdist; wheel verified in a clean venv.
     - [x] Homebrew tap live (github.com/protocake/homebrew-partspile; release-tarball formula, pip-wheel deps, precompiled `partspile-cutout`).
-    - [ ] `brew install` end-to-end verification — blocked on Ben's Xcode CLT update (task on board).
+    - [x] `brew install` verified end-to-end 2026-09-13 (48s build, partspile + precompiled partspile-cutout on PATH, fresh-install /setup flow boots from the Cellar).
     - [ ] PyPI publish (`partspile` name verified free) — blocked on Ben's PyPI token (task on board).
 - [ ] **Holdout check (Ben, manual)** — Ben runs against `fixtures/holdout/` himself. Never automated.
