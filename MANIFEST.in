@@ -2,3 +2,4 @@ include LICENSE
 include README.md
 recursive-include partspile/prompts *.md
 recursive-include partspile/native *.swift
+recursive-include partspile/sample_photos *.svg

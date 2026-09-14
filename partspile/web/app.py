@@ -70,6 +70,11 @@ async def worker_loop():
     provider_cfg = None
     base_prompt = ""
     while True:
+        if not backend_ready(cfg):
+            # Deferred onboarding: scans queue up and WAIT — the capture UI
+            # prompts the user to connect a backend; nothing fails.
+            await asyncio.sleep(2)
+            continue
         run = d.claim_next_run()
         if run is None:
             await asyncio.sleep(2)
@@ -94,7 +99,11 @@ async def worker_loop():
 @app.on_event("startup")
 async def startup():
     global _worker_task
-    get_db()
+    if os.environ.get("PARTS_PILE_SAMPLES", "1") != "0":
+        from ..sample_data import seed_samples
+        seed_samples(get_db(), PHOTO_DIR)
+    else:
+        get_db()
     if os.environ.get("PARTS_PILE_WORKER", "1") != "0":
         _worker_task = asyncio.create_task(worker_loop())
 
@@ -107,24 +116,43 @@ async def shutdown():
             await _worker_task
 
 
-def needs_setup() -> bool:
-    """Fresh installs land on provider=anthropic with no key: steer to /setup.
-    A UX nicety only — a scan queued anyway fails safely into fail_run."""
-    return cfg.provider == "anthropic" and not os.environ.get("ANTHROPIC_API_KEY")
+def backend_ready(c: Config) -> bool:
+    """Can the worker actually identify scans with the current config?
+    When False, queued scans wait (not fail) until the user connects a backend."""
+    import shutil as _sh
+    if c.provider == "anthropic":
+        return bool(os.environ.get("ANTHROPIC_API_KEY"))
+    if c.provider == "claude_code":
+        return bool(_sh.which(c.claude_bin))
+    if c.provider in ("ollama", "openai_compat"):
+        return True  # local endpoints: per-run errors surface in the queue as before
+    return False
+
+
+def _probe(url: str, timeout: float = 1.5) -> dict:
+    """Best-effort local model-server detection; never raises."""
+    import urllib.request
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as r:
+            body = json.load(r)
+        if "models" in body:  # Ollama /api/tags
+            models = [m.get("name", "") for m in body.get("models", [])]
+        else:                 # OpenAI-compatible /v1/models
+            models = [m.get("id", "") for m in body.get("data", [])]
+        return {"found": True, "models": [m for m in models if m][:8]}
+    except Exception:
+        return {"found": False, "models": []}
 
 
 @app.get("/", response_class=HTMLResponse)
 async def root_page():
-    """Desktop-first: the root is Browse (UI pass v2); phones get /capture via the QR."""
-    if needs_setup():
-        return RedirectResponse("/setup")
+    """Desktop-first: the root is Browse (UI pass v2); phones get /capture via the QR.
+    No setup gate — the welcome overlay orients, connect happens at first scan."""
     return HTMLResponse(BROWSE_PAGE)
 
 
 @app.get("/capture", response_class=HTMLResponse)
 async def capture_page():
-    if needs_setup():
-        return RedirectResponse("/setup")
     return HTMLResponse(CAPTURE_PAGE)
 
 
@@ -133,17 +161,68 @@ async def setup_page():
     return SETUP_PAGE
 
 
+@app.get("/api/setup/status")
+async def setup_status():
+    import shutil as _sh
+    return {
+        "provider": cfg.provider,
+        "model": cfg.model,
+        "ready": backend_ready(cfg),
+        "detect": {
+            "claude_cli": bool(_sh.which(cfg.claude_bin)),
+            "ollama": _probe("http://localhost:11434/api/tags"),
+            "lm_studio": _probe("http://localhost:1234/v1/models"),
+        },
+    }
+
+
+def _apply_config(values: dict[str, str]) -> None:
+    global cfg
+    save_local_config(values)
+    os.environ.update(values)
+    cfg = Config()
+
+
 @app.post("/api/setup")
 async def save_setup(api_key: str = Form(...)):
-    global cfg
     key = api_key.strip()
     if not key:
         raise HTTPException(400, "empty API key")
-    save_local_config({"PARTS_PILE_PROVIDER": "anthropic", "ANTHROPIC_API_KEY": key})
-    os.environ["ANTHROPIC_API_KEY"] = key
-    os.environ["PARTS_PILE_PROVIDER"] = "anthropic"
-    cfg = Config()
+    _apply_config({"PARTS_PILE_PROVIDER": "anthropic", "ANTHROPIC_API_KEY": key})
     return RedirectResponse("/", status_code=303)
+
+
+@app.post("/api/setup/claude-code")
+async def setup_claude_code():
+    import shutil as _sh
+    if not _sh.which(cfg.claude_bin):
+        raise HTTPException(400, "Claude Code CLI not found — install it and log in "
+                                 "first (https://claude.com/claude-code)")
+    _apply_config({"PARTS_PILE_PROVIDER": "claude_code"})
+    return {"ok": True}
+
+
+@app.post("/api/setup/local")
+async def setup_local(payload: dict):
+    provider = payload.get("provider", "")
+    model = (payload.get("model") or "").strip()
+    base_url = (payload.get("base_url") or "").strip()
+    if provider not in ("ollama", "openai_compat") or not model:
+        raise HTTPException(400, "provider (ollama|openai_compat) and model required")
+    values = {"PARTS_PILE_PROVIDER": provider, "PARTS_PILE_MODEL": model,
+              "PARTS_PILE_PROMPT": "v1-local"}
+    if provider == "openai_compat":
+        if not base_url:
+            raise HTTPException(400, "base_url required for openai_compat")
+        values["PARTS_PILE_BASE_URL"] = base_url
+    _apply_config(values)
+    return {"ok": True}
+
+
+@app.post("/api/samples/clear")
+async def samples_clear():
+    from ..sample_data import clear_samples
+    return {"removed": clear_samples(get_db(), PHOTO_DIR)}
 
 
 def _lan_ip() -> str:

@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 os.environ["PARTS_PILE_WORKER"] = "0"
+os.environ["PARTS_PILE_SAMPLES"] = "0"
 
 
 class WebTest(unittest.TestCase):

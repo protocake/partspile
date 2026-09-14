@@ -25,4 +25,4 @@ build-backend = "setuptools.build_meta"
 include = ["partspile*"]
 
 [tool.setuptools.package-data]
-partspile = ["prompts/*.md", "native/*.swift"]
+partspile = ["prompts/*.md", "native/*.swift", "sample_photos/*.svg"]

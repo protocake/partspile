@@ -54,6 +54,29 @@ BROWSE_PAGE = """<!doctype html>
  @keyframes slide{0%{margin-left:-35%}100%{margin-left:100%}}
 </style></head><body>
 """ + nav("Browse", '<span id="counts"></span>') + """
+<div id="welcome-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50">
+ <div style="max-width:560px;margin:8vh auto;background:var(--card);border:1px solid var(--line);
+             border-radius:14px;padding:28px 30px;box-shadow:0 18px 60px rgba(0,0,0,.5)">
+  <h2 style="margin:0 0 10px;font-size:21px">Welcome to Parts Pile!</h2>
+  <p style="font-size:14px;line-height:1.55;color:var(--dim)">This is a small open-source project
+   that uses an AI vision model to catalog your electronics parts. There are three sections:</p>
+  <ol style="font-size:14px;line-height:1.7;color:var(--txt);padding-left:22px;margin:10px 0 14px">
+   <li><b>Browse</b> — your storage area: the collection you're looking at now
+       (currently showing a few sample parts so you can see the idea).</li>
+   <li><b>Capture</b> — photograph items; each photo is sent to the model automatically.</li>
+   <li><b>Review</b> — confirm the model identified each item correctly before it
+       joins your collection.</li>
+  </ol>
+  <p style="font-size:14px;line-height:1.55;color:var(--dim)">To get started, scan the QR code
+   with your phone — it opens the camera capture page on this Wi-Fi. The first time through,
+   you'll be asked to connect a model: your Claude account or a local open-weight model
+   (Claude is the most accurate; local models are free and run entirely on your machine).</p>
+  <div style="display:flex;align-items:center;gap:14px;margin-top:18px">
+   <button class="b-blue" onclick="dismissWelcome()">Let's go</button>
+   <a href="#" onclick="clearSamples(event)" class="dim" style="font-size:13px">remove the sample parts</a>
+  </div>
+ </div>
+</div>
 <div class="layout">
  <div class="main">
   <input id="q" placeholder="Do I already have this?  Search parts, notes, serials…" autofocus>
@@ -375,5 +398,19 @@ async function openModal(id){
   document.onkeydown=(e)=>{if(e.key==='Escape')close();};
 }
 load(); pollScans(); setInterval(pollScans,4000);
+
+// First-run welcome overlay (dismiss persists in this browser).
+if(!localStorage.getItem('pp_welcomed')){
+  document.getElementById('welcome-overlay').style.display='block';
+}
+function dismissWelcome(){
+  localStorage.setItem('pp_welcomed','1');
+  document.getElementById('welcome-overlay').style.display='none';
+}
+async function clearSamples(e){
+  e.preventDefault();
+  await fetch('/api/samples/clear',{method:'POST'});
+  dismissWelcome(); load();
+}
 </script></body></html>
 """

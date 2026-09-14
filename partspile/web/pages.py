@@ -45,6 +45,11 @@ CAPTURE_PAGE = """<!doctype html>
  nav b{border-bottom:2px solid var(--blue);padding-bottom:2px}
 </style></head><body>
 """ + nav("Capture") + """
+<div id="connect-banner" style="display:none;background:#5f5310;border-radius:9px;
+     padding:10px 14px;margin:10px 0;font-size:14px">
+ No vision model connected yet — photos queue up and wait.
+ <a href="/setup" style="color:#fff;text-decoration:underline">Connect a model</a>
+</div>
 <h2>Capture</h2>
 <input type="text" id="location" placeholder="location (optional — shoebox is fine)">
 <button class="btn" id="shoot">&#128247; Take photo</button>
@@ -105,5 +110,13 @@ async function poll(){
   }catch(e){}
 }
 poll(); setInterval(poll, 3000);
+
+async function checkBackend(){
+  try{
+    const s=await (await fetch('/api/setup/status')).json();
+    document.getElementById('connect-banner').style.display=s.ready?'none':'block';
+  }catch(e){}
+}
+checkBackend(); setInterval(checkBackend, 5000);
 </script></body></html>
 """
