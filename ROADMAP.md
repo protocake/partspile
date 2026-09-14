@@ -29,7 +29,7 @@ The loop protocol lives in `CLAUDE.md`. Work the first unchecked milestone top t
   - [x] `.env.example` complete; local-model benchmarks logged (iters 8–13 in `evals/log.md`).
   - [x] Repo scrub at HEAD: history secret-grep clean; design-canvas tracking bug fixed.
   - [x] Fixtures + eval log to private `partspile-fixtures` repo via fresh-copy split (DECISIONS #43); ElectronicsIdentifier kept as private archive.
-- [ ] **M8 — Productization** *(Approach A approved by Ben 2026-09-11: minimal-diff, cloud-first onboarding)*
+- [x] **M8 — Productization** *(done 2026-09-13; Approach A. Distribution = brew tap + GitHub release; PyPI parked pending interest)*
   - [x] Phase 0 — `~/.partspile` data dir (`paths.py`); config/db/photos/cutouts off repo-relative paths; legacy `./data` shim.
   - [x] Phase 1 — PyPI packaging: `pyproject` deps fixed (+`python-multipart`), `[project.scripts]`, prompts+swift as package data, wheel verified.
   - [x] Phase 2 — CLI (`partspile serve`, browser auto-open, cloud-first nudge) + `/setup` onboarding page (key → `~/.partspile/config` 0600); 100 tests green; live smoke passed.
@@ -38,5 +38,5 @@ The loop protocol lives in `CLAUDE.md`. Work the first unchecked milestone top t
     - [x] v0.2.0 tagged + GitHub release with wheel/sdist; wheel verified in a clean venv.
     - [x] Homebrew tap live (github.com/protocake/homebrew-partspile; release-tarball formula, pip-wheel deps, precompiled `partspile-cutout`).
     - [x] `brew install` verified end-to-end 2026-09-13 (48s build, partspile + precompiled partspile-cutout on PATH, fresh-install /setup flow boots from the Cellar).
-    - [ ] PyPI publish (`partspile` name verified free) — blocked on Ben's PyPI token (task on board).
+    - [x] PyPI publish — PARKED by Ben 2026-09-13 until there's demonstrated interest (DECISIONS #44); brew tap + release wheel cover installs. Name `partspile` was free at check time.
 - [ ] **Holdout check (Ben, manual)** — Ben runs against `fixtures/holdout/` himself. Never automated.

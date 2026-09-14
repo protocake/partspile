@@ -2,6 +2,10 @@
 
 Non-obvious choices, per `KICKOFF.md`. Newest first.
 
+## 2026-09-13 — PyPI parked (Ben)
+
+44. **No PyPI publish until demonstrated interest.** Distribution v1 is the Homebrew tap (verified end-to-end) plus the GitHub-release wheel for non-brew users — both zero-account-cost. PyPI adds `uvx partspile`/`pipx install partspile` reach but requires Ben to create and maintain an account+token; he ruled that's not worth it speculatively. Revisit trigger: stars/issues/install questions from real users. The dist name `partspile` was free at check time and is NOT reserved — if someone squats it, the fallback is publishing under a variant name with the console command unchanged.
+
 ## 2026-09-12 — repo split by fresh copy, not history rewrite (Ben's call)
 
 43. **Two brand-new single-commit repos instead of git filter-repo.** Ben: keep this dir+history as a private archive; create `partspile` (public, all code at HEAD, no history) and `partspile-fixtures` (private, all data: fixture photos, truth.json, staging, full eval log + raw runs, design/bin02_small.jpg). No purge, no force-push, no SHA rewrite — the personal data never enters the public repo's history at all. Ben also lifted the holdout READ restriction (he can reshoot a fresh holdout batch later); the never-EVAL-against-holdout rule stands. tools/split_fixtures.sh is obsolete, superseded by this. New public repo name `partspile` chosen to match product/PyPI/sibling-clone convention (DECISIONS #8 said naming is Ben's call — one `gh repo rename` if he disagrees).
