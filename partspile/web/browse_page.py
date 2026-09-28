@@ -343,8 +343,17 @@ async function openModal(id){
   };
   document.getElementById('mclose').onclick=close;
   document.getElementById('backdrop').onclick=close;
-  document.getElementById('mlookup').onclick=()=>window.open(
-    'https://duckduckgo.com/?q='+encodeURIComponent(p.canonical+' datasheet product page'),'_blank');
+  document.getElementById('mlookup').onclick=()=>{
+    window.open('https://duckduckgo.com/?q='
+      +encodeURIComponent(p.canonical+' datasheet product page'),'_blank');
+    // A tab can't report back which URL was right — make the manual loop explicit.
+    const spec=document.getElementById('mspec');
+    spec.placeholder='found it? paste the URL here, then save';
+    spec.style.outline='2px solid var(--blue)';
+    const note=document.getElementById('guess-spec_url');
+    note.innerHTML='<span class="dim" style="font-size:12px">search opened in a new tab — '
+      +'paste the winning URL above and hit save (or let ✨ best guess find it for you)</span>';
+  };
   const guessBtn=document.getElementById('mguess');
   guessBtn.onclick=async()=>{
     guessBtn.disabled=true; guessBtn.textContent='guessing…';
