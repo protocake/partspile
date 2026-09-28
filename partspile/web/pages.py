@@ -51,11 +51,12 @@ CAPTURE_PAGE = """<!doctype html>
  <a href="/setup" style="color:#fff;text-decoration:underline">Connect a model</a>
 </div>
 <h2>Capture</h2>
+<div class="dim" style="font-size:13px;margin:2px 0 8px">One item per scan — shoot it from a couple of angles, then submit.</div>
 <input type="text" id="location" placeholder="location (optional — shoebox is fine)">
 <button class="btn" id="shoot">&#128247; Take photo</button>
 <button class="btn alt" id="pick">Choose from library</button>
 <div id="thumbs"></div>
-<button class="btn" id="submit" disabled>Submit bin (0 shots)</button>
+<button class="btn" id="submit" disabled>Submit item (0 shots)</button>
 <h2 style="margin-top:1.2rem">Scans</h2>
 <div id="queue" class="dim">loading…</div>
 <input type="file" id="cam" accept="image/*" capture="environment" hidden>
@@ -73,7 +74,7 @@ function add(files){
     const img=document.createElement('img');
     img.src=URL.createObjectURL(f); thumbs.appendChild(img);}
   submit.disabled=!shots.length;
-  submit.textContent=`Submit bin (${shots.length} shot${shots.length==1?'':'s'})`;
+  submit.textContent=`Submit item (${shots.length} shot${shots.length==1?'':'s'})`;
 }
 submit.onclick=async()=>{
   submit.disabled=true; submit.textContent='Submitting…';
@@ -84,7 +85,7 @@ submit.onclick=async()=>{
     const r=await fetch('/api/scans',{method:'POST',body:fd});
     if(!r.ok)throw new Error(await r.text());
     shots=[];thumbs.innerHTML='';
-    submit.textContent='Submit bin (0 shots)';
+    submit.textContent='Submit item (0 shots)';
     poll();
   }catch(e){alert('submit failed: '+e); submit.disabled=false;}
 };
