@@ -73,12 +73,13 @@ async function load(){
       addBtn.textContent='✓ re-scan queued'; inp.value='';};
     shots.appendChild(addBtn); shots.appendChild(inp);
     const partsCol=document.createElement('div'); partsCol.className='parts';
-    const refined=await refinedBoxes(b.parts.map(p=>p.id));
+    // Spotlight rings exist to tell parts apart — a single-part scan needs no
+    // ring (the photo IS the part), and box seeds are too unreliable to draw
+    // one for decoration (Ben, 2026-09-27, twice).
+    const multi=b.parts.length>1;
+    const refined=multi?await refinedBoxes(b.parts.map(p=>p.id)):{};
     for(const p of b.parts){
-      // Refined (pixel-segmented) boxes only: raw model bboxes localize poorly
-      // and are orientation-unreliable — a garbage ring confuses more than no
-      // ring (Ben, 2026-09-27).
-      const box=refined[p.id];
+      const box=multi?refined[p.id]:null;
       let ring=null;
       if(box&&photoFile){
         ring=document.createElement('div');
