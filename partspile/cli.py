@@ -58,6 +58,15 @@ def main(argv: list[str] | None = None) -> int:
 
 def _port_free(host: str, port: int) -> bool:
     import socket
+    # A bind test alone misses loopback-only squatters: macOS happily binds
+    # 0.0.0.0:P while another process holds 127.0.0.1:P — then the user's
+    # browser at localhost:P reaches the squatter, not us. If anything ACCEPTS
+    # a connection on localhost, the port is taken for our purposes.
+    try:
+        with socket.create_connection(("127.0.0.1", port), timeout=0.3):
+            return False
+    except OSError:
+        pass
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
