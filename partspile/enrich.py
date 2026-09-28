@@ -48,12 +48,15 @@ def guess_part_details(part: dict, photos: list[Path],
     prompt = PROMPT.format(
         canonical=part["canonical"], name=part["name"], category=part["category"],
         photos="\n".join(f"- {p.resolve()}" for p in photos))
-    proc = runner([
-        cfg.claude_bin, "-p", prompt,
-        "--output-format", "json",
-        "--model", cfg.model,
-        "--allowedTools", "Read,WebSearch,WebFetch",
-    ])
+    cmd = [cfg.claude_bin, "-p", prompt,
+           "--output-format", "json",
+           "--allowedTools", "Read,WebSearch,WebFetch"]
+    # Enrichment always runs on headless Claude (it needs real web search) even
+    # when scanning uses a local model — so cfg.model only applies when it IS a
+    # Claude model; otherwise let the CLI use its default.
+    if cfg.provider in ("claude_code", "anthropic"):
+        cmd += ["--model", cfg.model]
+    proc = runner(cmd)
     if proc.returncode != 0:
         raise RuntimeError(f"enrichment failed (rc={proc.returncode}): {proc.stderr[:300]}")
     envelope = json.loads(proc.stdout)
