@@ -265,7 +265,9 @@ async function openModal(id){
     // Render into an inner box: cropInto() replaces its target's children when
     // the image loads, which was silently deleting the star/delete overlays.
     const box=document.createElement('div');
-    box.style.cssText='position:absolute;inset:0;overflow:hidden;border-radius:inherit';
+    // width/height (not inset): cropInto flips the box to position:relative,
+    // and a relative box gets no size from inset — photos rendered 0x0.
+    box.style.cssText='width:100%;height:100%;overflow:hidden;border-radius:inherit';
     d.appendChild(box); render(box); d.onclick=onview;
     const st=document.createElement('button');
     st.textContent=(starred===starId)?'★':'☆';
