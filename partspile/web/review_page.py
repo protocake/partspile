@@ -75,7 +75,10 @@ async function load(){
     const partsCol=document.createElement('div'); partsCol.className='parts';
     const refined=await refinedBoxes(b.parts.map(p=>p.id));
     for(const p of b.parts){
-      const box=refined[p.id]||firstBox(p);
+      // Refined (pixel-segmented) boxes only: raw model bboxes localize poorly
+      // and are orientation-unreliable — a garbage ring confuses more than no
+      // ring (Ben, 2026-09-27).
+      const box=refined[p.id];
       let ring=null;
       if(box&&photoFile){
         ring=document.createElement('div');
