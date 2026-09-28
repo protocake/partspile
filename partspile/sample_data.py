@@ -15,17 +15,20 @@ from pathlib import Path
 SAMPLES_DIR = Path(__file__).resolve().parent / "sample_photos"
 SAMPLE_BIN = "samples"
 
+# Real photos from Wikimedia Commons (see sample_photos/SOURCES.md for credits —
+# each image keeps its own CC license; Ben's design call 2026-09-27: photos, not
+# illustrations).
 SAMPLE_PARTS = [
-    dict(svg="uno.svg", name="Arduino Uno R3 (clone)", canonical="UNO R3",
+    dict(img="uno.jpg", name="Arduino Uno R3", canonical="UNO R3",
          category="board", interface="uart", voltage="5V"),
-    dict(svg="hcsr04.svg", name="Ultrasonic distance sensor", canonical="HC-SR04",
+    dict(img="hcsr04.jpg", name="Ultrasonic distance sensor", canonical="HC-SR04",
          category="sensor", interface="digital", voltage="5V"),
-    dict(svg="stepper.svg", name="Geared stepper motor", canonical="28BYJ-48",
+    dict(img="stepper.jpg", name="Geared stepper motor with ULN2003 driver",
+         canonical="28BYJ-48", category="actuator", interface="digital", voltage="5V"),
+    dict(img="relay.jpg", name="1-channel 5V relay module", canonical="SRD-05VDC-SL-C",
          category="actuator", interface="digital", voltage="5V"),
-    dict(svg="oled.svg", name='0.96" OLED display 128x64', canonical="SSD1306",
-         category="display", interface="i2c", voltage="3.3-5V"),
-    dict(svg="battery.svg", name="Dual 18650 battery shield", canonical="18650 shield",
-         category="power", interface="unknown", voltage="5V/3V out"),
+    dict(img="battery.jpg", name="18650 Li-ion cell 3000mAh", canonical="18650",
+         category="power", interface="unknown", voltage="3.7V"),
 ]
 
 
@@ -38,8 +41,8 @@ def seed_samples(db, photo_dir: Path) -> bool:
     photo_dir.mkdir(parents=True, exist_ok=True)
     scan_id = db.create_scan("Sample data", location="")
     for p in SAMPLE_PARTS:
-        dest = photo_dir / f"sample_{p['svg']}"
-        shutil.copyfile(SAMPLES_DIR / p["svg"], dest)
+        dest = photo_dir / f"sample_{p['img']}"
+        shutil.copyfile(SAMPLES_DIR / p["img"], dest)
         cur = db.conn.execute(
             "INSERT INTO parts (scan_id, source_run_id, name, canonical, category, "
             " interface, voltage, qty, confidence, needs_reshoot, reshoot_reason, "

@@ -83,11 +83,11 @@ class OnboardingTest(unittest.TestCase):
         self.assertTrue(all(p["status"] == "accepted" for p in parts))
         self.assertTrue(all(p["bin"] == "samples" for p in parts))
         self.assertTrue(all(p["key_photo_id"] for p in parts))
-        self.assertEqual(len(list(photo_dir.glob("sample_*.svg"))), 5)
+        self.assertEqual(len(list(photo_dir.glob("sample_*.jpg"))), 5)
         self.assertFalse(seed_samples(d, photo_dir))  # idempotent
         self.assertEqual(clear_samples(d, photo_dir), 5)
         self.assertEqual(d.conn.execute("SELECT COUNT(*) c FROM parts").fetchone()["c"], 0)
-        self.assertEqual(list(photo_dir.glob("sample_*.svg")), [])
+        self.assertEqual(list(photo_dir.glob("sample_*.jpg")), [])
         # a used DB never gets re-seeded
         d.create_scan("real scan")
         self.assertFalse(seed_samples(d, photo_dir))

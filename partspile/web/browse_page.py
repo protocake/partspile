@@ -22,6 +22,7 @@ BROWSE_PAGE = """<!doctype html>
  .cname{font-weight:700;font-size:13px}
  .cfoot{display:flex;align-items:center;font-size:11px;color:var(--dim)}
  .cqty{margin-left:auto;font-size:15px;font-weight:700;color:var(--txt)}
+ #mqty::-webkit-outer-spin-button,#mqty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
  .rail{width:210px;border-left:1px solid var(--line);padding:16px;display:flex;
        flex-direction:column;gap:12px}
  .qrbox{background:var(--card);border-radius:12px;padding:12px;display:flex;
@@ -101,6 +102,11 @@ BROWSE_PAGE = """<!doctype html>
    <div class="dim" style="font-size:11px;line-height:1.4">opens the capture page<br>on this Wi-Fi</div>
   </div>
   <div>
+   <div id="connect-banner" style="display:none;background:#5f5310;border-radius:9px;
+        padding:9px 12px;margin-bottom:10px;font-size:13px;line-height:1.4">
+     No vision model connected — scans will queue and wait.
+     <a href="/setup" style="color:#fff;text-decoration:underline">Connect a model</a>
+   </div>
    <div class="dim" style="font-size:11px;font-weight:600;margin-bottom:6px">SCANS</div>
    <div id="scans" style="display:flex;flex-direction:column;gap:6px"></div>
   </div>
@@ -222,12 +228,19 @@ async function openModal(id){
          <input id="mbin" placeholder="e.g. bin 12" value="${p.bin||''}"></div>
        <div class="mrow"><div class="lbl">SERIAL NUMBER</div><input id="mserial" placeholder="add…" value="${p.serial||''}">
          <div id="guess-serial"></div></div>
-       <div class="mrow"><div class="lbl">QUANTITY</div><input id="mqty" type="number" min="1" value="${p.qty}"></div>
+       <div class="mrow"><div class="lbl">QUANTITY</div>
+         <div style="display:flex;align-items:stretch;gap:0">
+           <button id="mqty-minus" class="b-gray" style="border-radius:8px 0 0 8px;padding:8px 13px;font-size:15px">−</button>
+           <input id="mqty" type="number" min="1" value="${p.qty}"
+                  style="border-radius:0;text-align:center;width:64px;flex:1;-moz-appearance:textfield">
+           <button id="mqty-plus" class="b-gray" style="border-radius:0 8px 8px 0;padding:8px 13px;font-size:15px">+</button>
+         </div></div>
        <div class="mrow" style="grid-column:1/-1"><div class="lbl">LOCATION <span style="font-weight:400">— applies to everything scanned together</span></div>
          <input id="mloc" placeholder="shoebox, drawer, shelf…" value="${ctx.scan.location||''}"></div>
      </div>
      <div class="mrow"><div class="lbl">NOTES</div><textarea id="mnotes" placeholder="anything worth remembering about this item…">${p.notes||''}</textarea></div>
      <div style="display:flex;gap:10px;align-items:center;margin-top:auto">
+       <button class="b-red" id="mdelete">delete</button>
        <span class="dim" style="font-size:12px">scanned by ${p.canonical?'':''}${ctx.provenance}</span>
        <button class="b-green" style="margin-left:auto" id="msave">save</button>
      </div>
@@ -383,6 +396,14 @@ async function openModal(id){
     clearInterval(tick);
     guessBtn.disabled=false;
   };
+  const mqty=document.getElementById('mqty');
+  document.getElementById('mqty-minus').onclick=()=>{mqty.value=Math.max(1,(parseInt(mqty.value)||1)-1);};
+  document.getElementById('mqty-plus').onclick=()=>{mqty.value=(parseInt(mqty.value)||0)+1;};
+  document.getElementById('mdelete').onclick=async()=>{
+    if(!confirm(`Delete "${p.canonical||p.name}" and its photos from your inventory? This can't be undone.`))return;
+    await api('/api/parts/'+p.id,{method:'DELETE'});
+    close(); load();
+  };
   document.getElementById('msave').onclick=async()=>{
     await api('/api/parts/'+p.id,{method:'PATCH',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({serial:document.getElementById('mserial').value,
@@ -398,6 +419,18 @@ async function openModal(id){
   document.onkeydown=(e)=>{if(e.key==='Escape')close();};
 }
 load(); pollScans(); setInterval(pollScans,4000);
+
+async function checkBackend(){
+  try{
+    const s=await (await fetch('/api/setup/status')).json();
+    document.getElementById('connect-banner').style.display=s.ready?'none':'block';
+    const nm=document.getElementById('nav-model');
+    if(nm) nm.textContent = s.ready
+      ? (s.provider==='claude_code'?'Claude':(s.provider==='anthropic'?'Claude API':s.model))+' · '
+      : '';
+  }catch(e){}
+}
+checkBackend(); setInterval(checkBackend,5000);
 
 // First-run welcome overlay (dismiss persists in this browser).
 if(!localStorage.getItem('pp_welcomed')){

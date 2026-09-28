@@ -519,7 +519,14 @@ async def edit_part(part_id: int, fields: dict):
 
 @app.delete("/api/parts/{part_id}")
 async def delete_part(part_id: int):
-    get_db().delete_part(part_id)
+    """Remove a part and its part-attached photos (files included).
+    Scan-level captured photos stay — they may show other parts."""
+    d = get_db()
+    for ph in d.photos_for_part(part_id):
+        (PHOTO_DIR / Path(ph["path"]).name).unlink(missing_ok=True)
+    d.conn.execute("UPDATE parts SET key_photo_id = NULL WHERE id = ?", (part_id,))
+    d.conn.execute("DELETE FROM photos WHERE part_id = ?", (part_id,))
+    d.delete_part(part_id)
     return {"ok": True}
 
 

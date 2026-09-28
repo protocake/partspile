@@ -84,5 +84,11 @@ def nav(active: str, right: str = "") -> str:
     links = "".join(
         f"<b>{name}</b>" if name == active else f'<a href="{href}">{name}</a>'
         for name, href in items)
+    # The settings gear is on every page: the vision-model choice must stay
+    # reachable after first-run (Ben, 2026-09-27). #nav-model is filled by JS
+    # where the page polls /api/setup/status; static elsewhere.
+    gear = ('<a href="/setup" title="vision model settings" '
+            'style="margin-left:14px;white-space:nowrap">'
+            '<span id="nav-model" class="dim"></span>⚙ settings</a>')
     return (f'<nav><span class="brand">Parts Pile</span>{links}'
-            f'<span class="right">{right}</span></nav>')
+            f'<span class="right">{right}{gear}</span></nav>')

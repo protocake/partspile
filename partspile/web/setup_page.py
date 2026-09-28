@@ -67,6 +67,10 @@ SETUP_PAGE = f"""<!doctype html>
 let det=null;
 async function refresh(){{
   const r=await fetch('/api/setup/status'); det=await r.json();
+  const cur=document.getElementById('current');
+  if(det.ready){{cur.style.display='block';
+    cur.textContent='Currently connected: '+det.provider+' · '+det.model;}}
+  else cur.style.display='none';
   const pc=document.getElementById('pill-claude');
   pc.textContent=det.detect.claude_cli?'detected':'not found';
   pc.className='pill '+(det.detect.claude_cli?'on':'off');

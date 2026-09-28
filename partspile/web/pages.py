@@ -115,6 +115,10 @@ async function checkBackend(){
   try{
     const s=await (await fetch('/api/setup/status')).json();
     document.getElementById('connect-banner').style.display=s.ready?'none':'block';
+    const nm=document.getElementById('nav-model');
+    if(nm) nm.textContent = s.ready
+      ? (s.provider==='claude_code'?'Claude':(s.provider==='anthropic'?'Claude API':s.model))+' · '
+      : '';
   }catch(e){}
 }
 checkBackend(); setInterval(checkBackend, 5000);
