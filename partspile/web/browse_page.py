@@ -262,13 +262,17 @@ async function openModal(id){
   }
   function tile(starId,render,onview,label){
     const d=document.createElement('div'); d.className='mt'; d.style.position='relative';
-    render(d); d.onclick=onview;
+    // Render into an inner box: cropInto() replaces its target's children when
+    // the image loads, which was silently deleting the star/delete overlays.
+    const box=document.createElement('div');
+    box.style.cssText='position:absolute;inset:0;overflow:hidden;border-radius:inherit';
+    d.appendChild(box); render(box); d.onclick=onview;
     const st=document.createElement('button');
     st.textContent=(starred===starId)?'★':'☆';
     st.title='use as thumbnail';
     st.style.cssText='position:absolute;right:2px;top:2px;border:none;border-radius:6px;'+
-      'padding:0 4px;font-size:12px;cursor:pointer;background:rgba(17,20,24,.75);'+
-      'color:'+((starred===starId)?'#e8b93e':'#9aa0a6');
+      'padding:0 5px;font-size:13px;cursor:pointer;background:rgba(17,20,24,.8);'+
+      'color:'+((starred===starId)?'#e8b93e':'#d6dbe1');
     st.onclick=(e)=>{e.stopPropagation();setStar(starId);};
     d.appendChild(st);
     if(label){const b=document.createElement('span');
