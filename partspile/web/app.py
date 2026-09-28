@@ -87,6 +87,16 @@ async def worker_loop():
                 base_prompt = cfg.prompt_path().read_text()
             from ..glossary import build_glossary_text
             prompt = base_prompt + build_glossary_text(d.glossary())
+            if len(photos) > 1:
+                # App capture convention: one item per scan, shot from several
+                # angles. Without this the model lists the same item once per
+                # photo (seen live: 2 angles -> 2 duplicate parts).
+                prompt += (
+                    f"\n\nSCAN CONTEXT: these {len(photos)} photos were captured "
+                    "together and normally show ONE physical item from different "
+                    "angles. List each distinct physical item exactly once — never "
+                    "once per photo. Use the extra angles to read markings and "
+                    "raise your confidence, not to add duplicate entries.")
             call = getattr(provider, "identify_app", provider.identify)
             ident = await asyncio.to_thread(call, photos, prompt)
             parts = [p.model_dump() for p in ident.parts]
