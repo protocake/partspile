@@ -319,12 +319,19 @@ async function openModal(id){
     openModal(p.id);
   };
   const sug=document.getElementById('msuggest');
-  if(!p.spec_url){sug.disabled=true;sug.title='add a product page URL first';}
+  sug.title='uses the product page URL field — paste one first if empty';
   sug.onclick=async()=>{
+    const typed=document.getElementById('mspec').value.trim();
+    if(!typed && !p.spec_url){
+      document.getElementById('mspec').focus();
+      document.getElementById('mspec').style.outline='2px solid var(--amber)';
+      return;
+    }
     sug.disabled=true;sug.textContent='fetching…';
     const slot=document.getElementById('msuggestslot');
     try{
-      const r=await api('/api/parts/'+p.id+'/suggest-image',{method:'POST'});
+      const r=await api('/api/parts/'+p.id+'/suggest-image',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({spec_url:typed})});
       slot.innerHTML='';
       const row=document.createElement('div');
       row.style.cssText='margin-top:6px;padding:7px;border:1px dashed #e8b93e;border-radius:8px';

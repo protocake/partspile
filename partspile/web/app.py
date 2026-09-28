@@ -331,19 +331,25 @@ async def add_part_photo(part_id: int, photos: list[UploadFile]):
 
 
 @app.post("/api/parts/{part_id}/suggest-image")
-async def suggest_image(part_id: int):
-    """Fetch the part's product page and propose its main image (human confirms)."""
+async def suggest_image(part_id: int, payload: dict | None = None):
+    """Fetch the part's product page and propose its main image (human confirms).
+    A URL typed in the field wins over the saved one and is persisted with it."""
     from ..webimage import suggest_image_for_url
 
     d = get_db()
     part = d.conn.execute("SELECT * FROM parts WHERE id = ?", (part_id,)).fetchone()
     if not part:
         raise HTTPException(404)
-    if not part["spec_url"]:
+    url = ((payload or {}).get("spec_url") or "").strip() or part["spec_url"]
+    if not url:
         raise HTTPException(400, "no product page URL on this part yet")
+    if url != part["spec_url"]:
+        # keep the record consistent with where the image came from
+        d.conn.execute("UPDATE parts SET spec_url = ? WHERE id = ?", (url, part_id))
+        d.conn.commit()
     PHOTO_DIR.mkdir(parents=True, exist_ok=True)
     pending = PHOTO_DIR / f"pending_part{part_id}.img"
-    result = await asyncio.to_thread(suggest_image_for_url, part["spec_url"], pending)
+    result = await asyncio.to_thread(suggest_image_for_url, url, pending)
     if not result:
         raise HTTPException(404, "no usable image found on that page")
     return {"source": result, "preview": f"/photos/{pending.name}"}

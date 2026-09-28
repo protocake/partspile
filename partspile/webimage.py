@@ -33,6 +33,9 @@ def find_image_url(html: str, base_url: str) -> str | None:
         r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image(?::secure_url)?["\']',
         r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)',
         r'<link[^>]+rel=["\']image_src["\'][^>]+href=["\']([^"\']+)',
+        # Amazon product pages: no og:image, but the gallery JSON carries hiRes
+        r'"hiRes":"(https://m\.media-amazon\.com/images/I/[^"]+)"',
+        r'data-old-hires="(https://[^"]+)"',
     ]
     for pat in patterns:
         m = re.search(pat, html, re.IGNORECASE)
@@ -58,6 +61,8 @@ def suggest_image_for_url(page_url: str, dest: Path) -> str | None:
         if not img_url:
             return None
         data, ctype = _get(img_url, IMAGE_CAP)
+        if len(data) < 4096:
+            return None  # tracking pixel / beacon, not a product photo
         if len(data) > IMAGE_CAP:
             return None
         if not (ctype.startswith("image/") or data[:4] in (b"\x89PNG", b"\xff\xd8\xff\xe0",
