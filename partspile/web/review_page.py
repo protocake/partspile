@@ -47,7 +47,9 @@ async function load(){
   if(!bins.length){root.innerHTML='<span class="dim">nothing pending — go scan something</span>';return;}
   for(const b of bins){
     const h=document.createElement('h3');
-    h.textContent=b.location||'unfiled scan'; root.appendChild(h);
+    const when=b.created_at?new Date(b.created_at).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'';
+    h.textContent=(b.label||'scan')+(b.location?' · '+b.location:'')+(when?' · '+when:'');
+    root.appendChild(h);
     const row=document.createElement('div'); row.className='binrow';
     const photoFile=b.photos[0]?b.photos[0].file:null;
     const left=document.createElement('div'); left.className='photos';
@@ -73,6 +75,14 @@ async function load(){
       addBtn.textContent='✓ re-scan queued'; inp.value='';};
     shots.appendChild(addBtn); shots.appendChild(inp);
     const partsCol=document.createElement('div'); partsCol.className='parts';
+    if(b.empty){
+      const note=document.createElement('div'); note.className='part';
+      note.innerHTML=`<div style="flex:1">
+        <div class="pname">no parts identified</div>
+        <div class="pmeta">the model found nothing it could name in this scan —
+          try a closer or brighter shot from Capture, or a different angle</div></div>`;
+      partsCol.appendChild(note);
+    }
     // Spotlight rings exist to tell parts apart — a single-part scan needs no
     // ring (the photo IS the part), and box seeds are too unreliable to draw
     // one for decoration (Ben, 2026-09-27, twice).

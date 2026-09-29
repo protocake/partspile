@@ -518,19 +518,31 @@ async def review_page():
 async def review_data():
     d = get_db()
     out = []
-    for row in d.pending_parts():
-        scan_id = row["scan_id"]
+
+    def entry_for(scan_id: int) -> dict:
         entry = next((b for b in out if b["scan_id"] == scan_id), None)
         if entry is None:
             b = d.conn.execute("SELECT * FROM scans WHERE id = ?", (scan_id,)).fetchone()
             entry = {"scan_id": scan_id, "location": b["location"],
+                     "label": b["label"], "created_at": b["created_at"],
                      "photos": [{"file": Path(p["path"]).name}
                                 for p in d.photos_for_scan(scan_id)],
                      "parts": []}
             out.append(entry)
+        return entry
+
+    for row in d.pending_parts():
         part = dict(row)
         part["have"] = d.have_count(row["canonical"])
-        entry["parts"].append(part)
+        entry_for(row["scan_id"])["parts"].append(part)
+
+    # Scans whose run finished but produced NO parts used to vanish silently —
+    # Ben scanned an LED, got nothing, and only saw older pending scans.
+    for r in d.conn.execute(
+            "SELECT DISTINCT r.scan_id FROM ident_runs r WHERE r.status = 'done' "
+            "AND NOT EXISTS (SELECT 1 FROM parts p WHERE p.scan_id = r.scan_id)"):
+        entry_for(r["scan_id"])["empty"] = True
+    out.sort(key=lambda e: e["scan_id"], reverse=True)
     return out
 
 
