@@ -96,3 +96,18 @@ class OnboardingTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class WelcomeStateTest(OnboardingTest):
+    def test_welcome_server_decided(self):
+        # virgin db (samples off in tests): show
+        self.assertTrue(self.client.get("/api/welcome").json()["show"])
+        # dismiss persists in the config file, not the browser
+        self.client.post("/api/welcome/dismiss")
+        self.assertFalse(self.client.get("/api/welcome").json()["show"])
+        self.assertIn("PARTS_PILE_WELCOMED=1",
+                      (Path(self.tmp.name) / "dd" / "config").read_text())
+
+    def test_existing_database_never_sees_welcome(self):
+        self.appmod.get_db().create_scan("real scan")
+        self.assertFalse(self.client.get("/api/welcome").json()["show"])

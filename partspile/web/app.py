@@ -229,6 +229,26 @@ async def setup_local(payload: dict):
     return {"ok": True}
 
 
+@app.get("/api/welcome")
+async def welcome_state():
+    """First-run overlay is server-decided: localStorage broke on every port
+    change (the auto-picked port is part of the browser origin — Ben hit the
+    FTUE twice). Show only for a never-dismissed, no-real-content database."""
+    if os.environ.get("PARTS_PILE_WELCOMED"):
+        return {"show": False}
+    d = get_db()
+    real = d.conn.execute(
+        "SELECT 1 FROM scans WHERE label != 'Sample data' LIMIT 1").fetchone()
+    return {"show": real is None}
+
+
+@app.post("/api/welcome/dismiss")
+async def welcome_dismiss():
+    save_local_config({"PARTS_PILE_WELCOMED": "1"})
+    os.environ["PARTS_PILE_WELCOMED"] = "1"
+    return {"ok": True}
+
+
 @app.post("/api/samples/clear")
 async def samples_clear():
     from ..sample_data import clear_samples

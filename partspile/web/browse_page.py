@@ -454,13 +454,15 @@ async function checkBackend(){
 }
 checkBackend(); setInterval(checkBackend,5000);
 
-// First-run welcome overlay (dismiss persists in this browser).
-if(!localStorage.getItem('pp_welcomed')){
-  document.getElementById('welcome-overlay').style.display='block';
-}
+// First-run welcome overlay — server-decided (survives port changes and
+// recognizes an existing database; localStorage is origin-bound and the port
+// is part of the origin).
+fetch('/api/welcome').then(r=>r.json()).then(w=>{
+  if(w.show)document.getElementById('welcome-overlay').style.display='block';
+}).catch(()=>{});
 function dismissWelcome(){
-  localStorage.setItem('pp_welcomed','1');
   document.getElementById('welcome-overlay').style.display='none';
+  fetch('/api/welcome/dismiss',{method:'POST'});
 }
 async function clearSamples(e){
   e.preventDefault();
