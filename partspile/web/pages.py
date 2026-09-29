@@ -98,7 +98,7 @@ async function poll(){
     for(const r of rows){
       const div=document.createElement('div'); div.className='card';
       const warn=r.retake?' 📷 retake suggested: '+(r.retake_reason||'photo unclear'):'';
-      div.innerHTML=`<span>${r.location||'scan '+r.run_id}</span>
+      div.innerHTML=`<span>${r.label||r.location||'scan'}</span>
         <span class="dim">${r.status=='done'?r.parts+' part(s)'+warn:''}${r.status=='failed'?(r.error||'error').slice(0,60):''}</span>
         <span class="st ${r.status}">${r.status}</span>`;
       if(r.status=='failed'){

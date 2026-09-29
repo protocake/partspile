@@ -495,7 +495,7 @@ async def queue():
             fb = []
         retakes = [f for f in fb if f.get("verdict") == "retake"]
         out.append({"run_id": r["id"], "scan_id": r["scan_id"],
-                    "location": r["scan_location"],
+                    "label": r["scan_label"], "location": r["scan_location"],
                     "status": r["status"], "error": r["error"],
                     "parts": counts["c"], "pending": counts["p"] or 0,
                     "retake": bool(retakes),

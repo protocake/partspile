@@ -174,10 +174,10 @@ async function pollScans(){
       if(r.status==='done'){
         d.style.cursor='pointer';
         const warn=r.retake?' <span class="st queued" title="'+(r.retake_reason||'')+'">📷 retake?</span>':'';
-        d.innerHTML=`<span>${r.location||'scan '+r.run_id}</span>${warn}<span class="st done">${r.pending} to review →</span>`;
+        d.innerHTML=`<span>${r.label||r.location||'scan'}</span>${warn}<span class="st done">${r.pending} to review →</span>`;
         d.onclick=()=>{location.href='/review';};
       }else{
-        d.innerHTML=`<span>${r.location||'scan '+r.run_id}</span><span class="st ${r.status}">${r.status}</span>`;
+        d.innerHTML=`<span>${r.label||r.location||'scan'}</span><span class="st ${r.status}">${r.status}</span>`;
         if(r.status==='failed'){const b=document.createElement('button');b.className='b-gray';
           b.style.padding='2px 8px';b.textContent='retry';
           b.onclick=async()=>{await api('/api/runs/'+r.run_id+'/retry',{method:'POST'});pollScans();};
