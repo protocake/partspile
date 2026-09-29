@@ -47,11 +47,20 @@ class ShotFeedback(BaseModel):
     reason: str = ""
 
 
+class AppPart(Part):
+    """App-runtime part: records which photo the item was found in, so review
+    and browse crop the right image (Ben, 2026-09-28). Eval Part is untouched."""
+
+    source_shot: str = Field(
+        "", description="filename of the photo this item is most clearly visible in")
+
+
 class AppBinIdentification(BinIdentification):
     """App-runtime variant only: adds per-photo feedback so capture can prompt an
     immediate reshoot. NEVER used by the eval (embedded schema text must stay
     identical for tuning comparability)."""
 
+    parts: List[AppPart]
     photo_feedback: List[ShotFeedback] = []
 
 
@@ -85,6 +94,16 @@ class LocalPart(BaseModel):
 
 class LocalBinIdentification(BaseModel):
     parts: List[LocalPart]
+
+
+class AppLocalPart(LocalPart):
+    """App-runtime local part (grammar order: appended last, after decisions)."""
+
+    source_shot: str = ""
+
+
+class AppLocalBinIdentification(BaseModel):
+    parts: List[AppLocalPart]
 
 
 def json_schema_str() -> str:

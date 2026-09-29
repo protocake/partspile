@@ -605,8 +605,13 @@ def _thumb(d: Db, row) -> str:
                            (row["key_photo_id"],)).fetchone()
         if p:
             return Path(p["path"]).name
-    first = d.photos_for_scan(row["scan_id"])
-    return Path(first[0]["path"]).name if first else ""
+    photos = d.photos_for_scan(row["scan_id"])
+    src = row["source_shot"] if "source_shot" in row.keys() else ""
+    if src:
+        for p in photos:
+            if Path(p["path"]).name == src:
+                return src
+    return Path(photos[0]["path"]).name if photos else ""
 
 
 @app.get("/api/parts")

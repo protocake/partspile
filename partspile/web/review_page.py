@@ -79,6 +79,9 @@ async function load(){
     const multi=b.parts.length>1;
     const refined=multi?await refinedBoxes(b.parts.map(p=>p.id)):{};
     for(const p of b.parts){
+      // Crop this part's card from ITS photo, not photos[0] (source_shot).
+      const pFile=(p.source_shot&&b.photos.some(ph=>ph.file===p.source_shot))
+        ?p.source_shot:photoFile;
       const box=multi?refined[p.id]:null;
       let ring=null;
       if(box&&photoFile){
@@ -103,7 +106,7 @@ async function load(){
           <a href="${specSearch(p.canonical)}" target="_blank" style="align-self:center;font-size:12px">datasheet</a>
         </div></div>`;
       const cut=div.querySelector('.cut');
-      if(photoFile)requestAnimationFrame(()=>smartThumb(cut,p.id,'/photos/'+photoFile,box));
+      if(pFile)requestAnimationFrame(()=>smartThumb(cut,p.id,'/photos/'+pFile,box));
       if(ring){div.onmouseenter=()=>ring.classList.add('active');
                div.onmouseleave=()=>ring.classList.remove('active');}
       div.querySelector('.act-accept').onclick=async()=>{await api('/api/parts/'+p.id+'/accept',{method:'POST'});load();};

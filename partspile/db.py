@@ -13,7 +13,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 5
+SCHEMA_VERSION = 6
 
 # version-gated ALTERs applied to existing databases (idempotent via user_version)
 MIGRATIONS: dict[int, list[str]] = {
@@ -34,6 +34,9 @@ MIGRATIONS: dict[int, list[str]] = {
     ],
     5: [
         "ALTER TABLE ident_runs ADD COLUMN photo_feedback_json TEXT NOT NULL DEFAULT '[]'",
+    ],
+    6: [
+        "ALTER TABLE parts ADD COLUMN source_shot TEXT NOT NULL DEFAULT ''",
     ],
 }
 
@@ -90,7 +93,8 @@ CREATE TABLE IF NOT EXISTS parts (
     key_photo_id INTEGER REFERENCES photos(id),
     serial TEXT NOT NULL DEFAULT '',
     notes TEXT NOT NULL DEFAULT '',
-    bin TEXT NOT NULL DEFAULT ''
+    bin TEXT NOT NULL DEFAULT '',
+    source_shot TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_runs_status ON ident_runs(status);
 CREATE INDEX IF NOT EXISTS idx_parts_canonical ON parts(canonical);
@@ -228,12 +232,12 @@ class Db:
                 self.conn.execute(
                     "INSERT INTO parts (scan_id, source_run_id, name, canonical, category, "
                     " interface, voltage, qty, confidence, needs_reshoot, reshoot_reason, "
-                    " bbox_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    " bbox_json, source_shot) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (run["scan_id"], run_id, p["name"], p["canonical"], p["category"],
                      p.get("interface", "unknown"), p.get("voltage", "unknown"),
                      p.get("qty", 1), p.get("confidence", "low"),
                      int(bool(p.get("needs_reshoot"))), p.get("reshoot_reason", ""),
-                     json.dumps(p.get("bboxes", []))))
+                     json.dumps(p.get("bboxes", [])), p.get("source_shot", "")))
 
     def fail_run(self, run_id: int, error: str) -> None:
         self.conn.execute(

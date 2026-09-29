@@ -70,6 +70,8 @@ class ClaudeCodeProvider:
             f"photo is too blurry, too dark, or so overlapping/cluttered that parts "
             f"cannot be separated — with a reason saying how to reshoot it; verdict "
             f"'ok' otherwise. Use the photo's filename as 'shot'.\n\n"
+            f"For EVERY part, set source_shot to the filename of the photo where "
+            f"that item is most clearly visible.\n\n"
             f"Output JSON schema:\n{schema}\n\n"
             f"Reply with ONLY the JSON object. No prose, no fences."
         )

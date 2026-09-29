@@ -16,7 +16,8 @@ from pathlib import Path
 import re
 
 from ..config import Config
-from ..schema import BinIdentification, LocalBinIdentification, Part
+from ..schema import (AppBinIdentification, AppLocalBinIdentification,
+                      AppPart, BinIdentification, LocalBinIdentification, Part)
 from .openai_compat import _prepped_bytes
 
 
@@ -38,16 +39,30 @@ class OllamaNativeProvider:
             return json.load(resp)
 
     def identify(self, photos: list[Path], base_prompt: str) -> BinIdentification:
+        local = self._call(photos, base_prompt, LocalBinIdentification)
+        return _enforce(local, Part, BinIdentification)
+
+    def identify_app(self, photos: list[Path], base_prompt: str) -> AppBinIdentification:
+        """App variant: parts carry source_shot (which photo the item is in)."""
+        names = ", ".join(p.name for p in photos)
+        prompt = (base_prompt
+                  + f"\n\nThe photos, in order, are named: {names}. For every part, "
+                    "set source_shot to the filename of the photo where that item "
+                    "is most clearly visible.")
+        local = self._call(photos, prompt, AppLocalBinIdentification)
+        return _enforce(local, AppPart, AppBinIdentification)
+
+    def _call(self, photos: list[Path], prompt: str, schema_cls):
         images = []
         for p in photos:
             raw, _ = _prepped_bytes(p)
             images.append(base64.standard_b64encode(raw).decode("utf-8"))
         body = {
             "model": self.cfg.model,
-            "messages": [{"role": "user", "content": base_prompt, "images": images}],
+            "messages": [{"role": "user", "content": prompt, "images": images}],
             "stream": False,
             "think": False,
-            "format": LocalBinIdentification.model_json_schema(),
+            "format": schema_cls.model_json_schema(),
             "options": {"temperature": 0.3},
         }
         payload = self._post(self.base + "/api/chat", body)
@@ -55,11 +70,10 @@ class OllamaNativeProvider:
         fence = re.match(r"^```(?:json)?\s*(.*?)\s*```$", text, re.DOTALL)
         if fence:
             text = fence.group(1)
-        local = LocalBinIdentification.model_validate(json.loads(text))
-        return _enforce(local)
+        return schema_cls.model_validate(json.loads(text))
 
 
-def _enforce(local: LocalBinIdentification) -> BinIdentification:
+def _enforce(local, part_cls=Part, container_cls=BinIdentification):
     """Deterministic consequences of the schema-forced decisions (DECISIONS #38):
     self-declared attached components are dropped; anything not clearly legible is
     forced to needs_reshoot with confidence capped at medium."""
@@ -74,5 +88,5 @@ def _enforce(local: LocalBinIdentification) -> BinIdentification:
                 d["reshoot_reason"] = f"markings {lp.legibility.replace('_', ' ')}"
             if d.get("confidence") == "high":
                 d["confidence"] = "medium"
-        parts.append(Part.model_validate(d))
-    return BinIdentification(parts=parts)
+        parts.append(part_cls.model_validate(d))
+    return container_cls(parts=parts)
